@@ -1,0 +1,4 @@
+.hfh-sprint .textbox__header {
+    display: flex;
+    justify-content: space-between;
+}
