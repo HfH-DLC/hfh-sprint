@@ -24,10 +24,23 @@ class Category_Table
         add_shortcode('hfh_category_table', array($this, 'category_table_shortcode'));
     }
 
-    public function category_table_shortcode()
+    public function category_table_shortcode($atts)
     {
 
-        $top_categories = $this->get_top_categories(get_the_category());
+        $top_categories =  $this->get_top_categories(get_the_category());
+
+        if ($atts && $atts["categories"]) {
+            $top_category_ids = explode(",", $atts["categories"]);
+            $top_categories = array_reduce($top_category_ids, function ($acc, $id) use ($top_categories) {
+                foreach ($top_categories as $key => $value) {
+                    if ($id == $key) {
+                        $acc[$key] = $value;
+                    }
+                }
+                return $acc;
+            }, []);
+        }
+
         $o              = '';
 
         foreach ($top_categories as $top_id => $categories) {
@@ -46,7 +59,7 @@ class Category_Table
 
     private function get_top_categories($categories)
     {
-        $leaves = array();
+        $result = array();
         foreach ($categories as $category) {
             $children = get_categories(
                 array(
@@ -55,10 +68,10 @@ class Category_Table
             );
             if (count($children) === 0) {
                 $top_ancestor                       = $this->get_top_ancestor($category);
-                $leaves[$top_ancestor->term_id][] = $category;
+                $result[$top_ancestor->term_id][] = $category;
             }
         }
-        return $leaves;
+        return $result;
     }
 
     private function get_top_ancestor($term)
