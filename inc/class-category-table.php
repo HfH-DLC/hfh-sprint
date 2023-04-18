@@ -22,6 +22,7 @@ class Category_Table
     public function init()
     {
         add_shortcode('hfh_category_table', array($this, 'category_table_shortcode'));
+        add_action('wp_enqueue_scripts', array($this, 'wp_enqueue_scripts'));
     }
 
     public function category_table_shortcode($atts)
@@ -45,7 +46,7 @@ class Category_Table
 
         foreach ($top_categories as $top_id => $categories) {
             $top_category = get_category($top_id);
-            $o           .= '<table><tbody>';
+            $o           .= '<table class="hfh-category-table"><tbody>';
             $o           .= "<tr><th>$top_category->name</th></tr>";
             $o           .= "<tr style='border-bottom: 2px solid #F2D1D4;'><td style='background-color: #fbf3f4;'>";
             $o           .= implode(', ', array_map(function ($category) {
@@ -81,5 +82,11 @@ class Category_Table
             return $this->get_top_ancestor($term);
         }
         return $term;
+    }
+
+
+    public function wp_enqueue_scripts()
+    {
+        wp_enqueue_style('hfh-sprint-category-table', HFH_SPRINT_URL . 'css/category-table.css');
     }
 }
