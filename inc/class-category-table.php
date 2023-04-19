@@ -25,6 +25,15 @@ class Category_Table
         add_action('wp_enqueue_scripts', array($this, 'wp_enqueue_scripts'));
     }
 
+    /**
+     * The hfh_category_table shortcode displays tables of the current pages categories.
+     * The categories are grouped by "top categories", which are categories without a parent.
+     * The top categories are used as table headers while the subcategories are concatenated in a comma-separated string.
+     * The top categories to be used can be specified using the "categories" attribute of the shortcode, which should be a comma-sepparated list of category ids.
+     * 
+     * @param array $atts The shortcode attributes.
+     * 
+     */
     public function category_table_shortcode($atts)
     {
 
